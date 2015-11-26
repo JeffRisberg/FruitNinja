@@ -1,0 +1,6 @@
+node_modules
+build
+*.log
+*.tmp
+.idea/workspace.xml
+.idea/tasks.xml

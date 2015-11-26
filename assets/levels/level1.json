@@ -1,0 +1,51 @@
+{
+    "assets": {
+        "fruit_image": {"type": "image", "source": "assets/images/fruit.png"},
+        "bomb_image": {"type": "image", "source": "assets/images/bomb.png"},
+        "background_image": {"type": "image", "source": "assets/images/background.png"},
+        "fruits_spritesheet": {"type": "spritesheet", "source": "assets/images/fruits.png", "frame_width": 28, "frame_height": 28}
+    },
+    "groups": [
+        "background",
+        "spawners",
+        "fruits",
+        "bombs",
+        "cuts",
+        "hud"
+    ],
+    "prefabs": {
+        "background": {
+            "type": "background",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "background_image",
+                "group": "background"
+            }
+        },
+        "fruit_spawner": {
+            "type": "fruit_spawner",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "",
+                "group": "spawners",
+                "pool": "fruits",
+                "spawn_time": {"min": 1, "max": 3},
+                "velocity_x": {"min": -100, "max": 100},
+                "velocity_y": {"min": 850, "max": 1000},
+                "frames": [20, 21, 23, 35, 38]
+            }
+        },
+        "bomb_spawner": {
+            "type": "bomb_spawner",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "",
+                "group": "spawners",
+                "pool": "bombs",
+                "spawn_time": {"min": 1, "max": 3},
+                "velocity_x": {"min": -100, "max": 100},
+                "velocity_y": {"min": 850, "max": 1000}
+            }
+        }
+    }
+}
