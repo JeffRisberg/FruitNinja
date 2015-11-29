@@ -9,8 +9,9 @@ import Score from '../prefabs/HUD/Score';
 import RemainingTime from '../prefabs/HUD/RemainingTime';
 import Lives from '../prefabs/HUD/Lives';
 import GameOverPanel from '../prefabs/HUD/GameOverPanel';
+import JSONLevelState from '../states/JSONLevelState';
 
-class PlayState extends Phaser.State {
+class PlayState extends JSONLevelState {
 
     constructor() {
         super();
@@ -26,15 +27,7 @@ class PlayState extends Phaser.State {
     }
 
     init(level_data) {
-        this.level_data = level_data;
-
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
-
-        // start physics system
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.physics.arcade.gravity.y = 1000;
+        super.init(level_data);
 
         this.MINIMUM_SWIPE_LENGTH = 50;
 
@@ -45,44 +38,13 @@ class PlayState extends Phaser.State {
     }
 
     create() {
-        var group_name, prefab_name;
-
-        // create groups
-        this.groups = {};
-        this.level_data.groups.forEach(function (group_name) {
-            this.groups[group_name] = this.game.add.group();
-        }, this);
-
-        // create prefabs
-        this.prefabs = {};
-        for (prefab_name in this.level_data.prefabs) {
-
-            if (this.level_data.prefabs.hasOwnProperty(prefab_name)) {
-                this.create_prefab(prefab_name, this.level_data.prefabs[prefab_name]);
-            }
-        }
+        super.create();
 
         // add events to check for swipe
         this.game.input.onDown.add(this.start_swipe, this);
         this.game.input.onUp.add(this.end_swipe, this);
 
         this.init_hud();
-    }
-
-    create_prefab(prefab_name, prefab_data) {
-        var prefab_position, prefab;
-        // create object according to its type
-        if (this.prefab_classes.hasOwnProperty(prefab_data.type)) {
-            if (prefab_data.position.x > 0 && prefab_data.position.x <= 1) {
-                // position as percentage
-                prefab_position = new Phaser.Point(prefab_data.position.x * this.game.world.width,
-                    prefab_data.position.y * this.game.world.height);
-            } else {
-                // position as absolute number
-                prefab_position = prefab_data.position;
-            }
-            prefab = new this.prefab_classes[prefab_data.type](this, prefab_name, prefab_position, prefab_data.properties);
-        }
     }
 
     start_swipe(pointer) {
