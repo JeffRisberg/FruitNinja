@@ -15,8 +15,7 @@ class StartGameItem extends TextPrefab {
     }
 
     select() {
-        console.log("select " + this.level_file);
-        this.game_state.state.start("play", true, false, this.level_file, this.state_name);
+        this.game_state.state.start("boot", true, false, this.level_file, this.state_name);
     }
 }
 

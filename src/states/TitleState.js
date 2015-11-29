@@ -15,7 +15,6 @@ class TitleState extends JSONLevelState {
     }
 
     create() {
-        console.log("Title Create");
         super.create();
         var title_position, title_style, title, menu_position, menu_items, menu_properties, menu;
 
