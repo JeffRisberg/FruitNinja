@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Fruit Ninja ported to ES6</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            background-color: black;
+        }
+
+        @font-face {
+            font-family: 'Shojumaru';
+            src: url('assets/fonts/shojumaru.ttf');
+        }
+
+        .fontPreload {
+            font-family: Shojumaru;
+            position: absolute;
+            left: -100px;
+        }
+    </style>
 </head>
 <body>
 <div id="content"></div>
+<div class="fontPreload">.</div>
+
 <script src="build/scripts/phaser.min.js"></script>
 <script src="build/scripts/game.js"></script>
 </body>

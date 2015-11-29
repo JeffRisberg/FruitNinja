@@ -4,8 +4,9 @@ class BootState extends Phaser.State {
         super();
     }
 
-    init(level_file) {
+    init(level_file, next_state) {
         this.level_file = level_file;
+        this.next_state = next_state;
     }
 
     preload() {
@@ -17,7 +18,7 @@ class BootState extends Phaser.State {
 
         level_text = this.game.cache.getText("level1");
         level_data = JSON.parse(level_text);
-        this.game.state.start("loading", true, false, level_data);
+        this.game.state.start("loading", true, false, level_data, this.next_state);
     }
 }
 

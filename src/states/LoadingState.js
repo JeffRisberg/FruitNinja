@@ -4,9 +4,11 @@ class LoadingState extends Phaser.State {
         super();
     }
 
-    init(level_data) {
+    init(level_data, next_state) {
         this.level_data = level_data;
+        this.next_state = next_state;
     }
+
     preload() {
         var assets = this.level_data.assets;
 
@@ -26,7 +28,7 @@ class LoadingState extends Phaser.State {
     }
 
     create() {
-        this.game.state.start("play", true, false, this.level_data);
+        this.game.state.start(this.next_state, true, false, this.level_data);
     }
 }
 

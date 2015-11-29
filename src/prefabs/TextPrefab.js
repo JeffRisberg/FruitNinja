@@ -1,4 +1,4 @@
-class Score extends Phaser.Text {
+class TextPrefab extends Phaser.Text {
 
     constructor(game_state, name, position, properties) {
         super(game_state.game, position.x, position.y, properties.text, properties.style);
@@ -11,11 +11,6 @@ class Score extends Phaser.Text {
 
         this.game_state.prefabs[name] = this;
     }
-
-    update() {
-        // update the text to show the number of cutted fruits
-        this.text = "Fruits: " + this.game_state.score;
-    }
 }
 
-export default Score;
+export default TextPrefab;

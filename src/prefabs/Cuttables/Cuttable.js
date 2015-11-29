@@ -1,4 +1,4 @@
-import Prefab from "./Prefab";
+import Prefab from "../Prefab";
 
 class Cuttable extends Prefab {
 

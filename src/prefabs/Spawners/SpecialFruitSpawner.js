@@ -1,5 +1,5 @@
 import Spawner from "./Spawner";
-import SpecialFruit from "./SpecialFruit";
+import SpecialFruit from "../Cuttables/SpecialFruit";
 
 class SpecialFruitSpawner extends Spawner {
 

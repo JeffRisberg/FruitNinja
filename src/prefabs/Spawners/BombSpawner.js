@@ -1,5 +1,5 @@
 import Spawner from "./Spawner";
-import Bomb from "./Bomb";
+import Bomb from "../Cuttables/Bomb";
 
 class BombSpawner extends Spawner {
 

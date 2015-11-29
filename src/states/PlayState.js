@@ -1,11 +1,14 @@
 import Prefab from '../prefabs/Prefab';
-import BombSpawner from '../prefabs/BombSpawner';
-import FruitSpawner from '../prefabs/FruitSpawner';
-import SpecialFruitSpawner from '../prefabs/SpecialFruitSpawner';
-import Cut from '../prefabs/Cut';
-import Score from '../prefabs/Score';
-import Lives from '../prefabs/Lives';
-import GameOverPanel from '../prefabs/GameOverPanel';
+import BombSpawner from '../prefabs/Spawners/BombSpawner';
+import FruitSpawner from '../prefabs/Spawners/FruitSpawner';
+import SpecialFruitSpawner from '../prefabs/Spawners/SpecialFruitSpawner';
+import TimeBombSpawner from '../prefabs/Spawners/TimeBombSpawner';
+import ClockSpawner from '../prefabs/Spawners/ClockSpawner';
+import Cut from '../prefabs/Cuttables/Cut';
+import Score from '../prefabs/HUD/Score';
+import RemainingTime from '../prefabs/HUD/RemainingTime';
+import Lives from '../prefabs/HUD/Lives';
+import GameOverPanel from '../prefabs/HUD/GameOverPanel';
 
 class PlayState extends Phaser.State {
 
@@ -16,6 +19,8 @@ class PlayState extends Phaser.State {
             "bomb_spawner": BombSpawner,
             "fruit_spawner": FruitSpawner,
             "special_fruit_spawner": SpecialFruitSpawner,
+            "time_bomb_spawner": TimeBombSpawner,
+            "clock_spawner": ClockSpawner,
             "background": Prefab
         };
     }
@@ -35,6 +40,8 @@ class PlayState extends Phaser.State {
 
         this.score = 0;
         this.lives = 3;
+
+        this.remaining_time = Phaser.Timer.SECOND * 60;
     }
 
     create() {
@@ -63,10 +70,18 @@ class PlayState extends Phaser.State {
     }
 
     create_prefab(prefab_name, prefab_data) {
-        var prefab;
+        var prefab_position, prefab;
         // create object according to its type
         if (this.prefab_classes.hasOwnProperty(prefab_data.type)) {
-            prefab = new this.prefab_classes[prefab_data.type](this, prefab_name, prefab_data.position, prefab_data.properties);
+            if (prefab_data.position.x > 0 && prefab_data.position.x <= 1) {
+                // position as percentage
+                prefab_position = new Phaser.Point(prefab_data.position.x * this.game.world.width,
+                    prefab_data.position.y * this.game.world.height);
+            } else {
+                // position as absolute number
+                prefab_position = prefab_data.position;
+            }
+            prefab = new this.prefab_classes[prefab_data.type](this, prefab_name, prefab_position, prefab_data.properties);
         }
     }
 
@@ -94,6 +109,8 @@ class PlayState extends Phaser.State {
             this.groups.fruits.forEachAlive(this.check_collision, this);
             this.groups.bombs.forEachAlive(this.check_collision, this);
             this.groups.special_fruits.forEachAlive(this.check_collision, this);
+            this.groups.time_bombs.forEachAlive(this.check_collision, this);
+            this.groups.clocks.forEachAlive(this.check_collision, this);
         }
     }
 
@@ -115,14 +132,40 @@ class PlayState extends Phaser.State {
 
     init_hud() {
         var score_position, score_style, score, lives_position, lives;
+        var remaining_time_position, remaining_time_style, remaining_time;
+
         // create score prefab
         score_position = new Phaser.Point(20, 20);
-        score_style = {font: "48px Arial", fill: "#fff"};
+        score_style = {font: "48px Shojumaru", fill: "#fff"};
         score = new Score(this, "score", score_position, {text: "Fruits: ", style: score_style, group: "hud"});
 
         // create lives prefab
-        lives_position = new Phaser.Point(0.75 * this.game.world.width, 20);
-        lives = new Lives(this, "lives", lives_position, {texture: "sword_image", group: "hud", "lives": 3, "lives_spacing": 50});
+        lives_position = new Phaser.Point(0.88 * this.game.world.width, 20);
+        lives = new Lives(this, "lives", lives_position, {
+            texture: "sword_image",
+            group: "hud",
+            "lives": 3,
+            "lives_spacing": 50
+        });
+
+        // show remaining time prefab
+        remaining_time_position = new Phaser.Point(0.50 * this.game.world.width, 20);
+        remaining_time_style = {font: "48px Shojumaru", fill: "#fff"};
+        remaining_time = new RemainingTime(this, "remaining_time", remaining_time_position, {
+            text: "Remaining time: ",
+            style: remaining_time_style,
+            group: "hud"
+        });
+    }
+
+    update() {
+        if (this.remaining_time > 0) {
+            this.remaining_time -= this.game.time.elapsed;
+            if (this.remaining_time <= 0) {
+                this.game_over();
+                this.remaining_time = 0;
+            }
+        }
     }
 
     game_over() {
@@ -137,11 +180,19 @@ class PlayState extends Phaser.State {
         game_over_bitmap = this.add.bitmapData(this.game.world.width, this.game.world.height);
         game_over_bitmap.ctx.fillStyle = "#000";
         game_over_bitmap.ctx.fillRect(0, 0, this.game.world.width, this.game.world.height);
-        panel_text_style = {game_over: {font: "32px Arial", fill: "#FFF"},
-            current_score: {font: "20px Arial", fill: "#FFF"},
-            highest_score: {font: "18px Arial", fill: "#FFF"}};
+        panel_text_style = {
+            game_over: {font: "32px Shojumaru", fill: "#FFF"},
+            current_score: {font: "20px Shojumaru", fill: "#FFF"},
+            highest_score: {font: "18px Shojumaru", fill: "#FFF"}
+        };
+
         // create the game over panel
-        game_over_panel = new GameOverPanel(this, "game_over_panel", game_over_position, {texture: game_over_bitmap, group: "hud", text_style: panel_text_style, animation_time: 500});
+        game_over_panel = new GameOverPanel(this, "game_over_panel", game_over_position, {
+            texture: game_over_bitmap,
+            group: "hud",
+            text_style: panel_text_style,
+            animation_time: 500
+        });
         this.groups.hud.add(game_over_panel);
     }
 

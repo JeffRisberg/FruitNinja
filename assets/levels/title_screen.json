@@ -1,0 +1,31 @@
+{
+    "assets": {
+        "background_image": {"type": "image", "source": "build/images/background.png"}
+    },
+    "groups": [
+        "background",
+        "hud",
+        "menu_items"
+    ],
+    "prefabs": {
+        "background": {
+            "type": "background",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "background_image",
+                "group": "background"
+            }
+        },
+        "start_game_item": {
+            "type": "start_game_item",
+            "position": {"x": 0.5, "y": 0.6},
+            "properties": {
+                "text": "Start",
+                "style": {"font": "32px Shojumaru", "fill": "#FFF"},
+                "group": "menu_items",
+                "level_file": "build/levels/level1.json",
+                "state_name": "play"
+            }
+        }
+    }
+}

@@ -1,5 +1,7 @@
 {
     "assets": {
+        "time_bomb_image": {"type": "image", "source": "build/images/bomb.png"},
+        "clock_image": {"type": "image", "source": "build/images/clock.png"},
         "bomb_image": {"type": "image", "source": "build/images/bomb.png"},
         "background_image": {"type": "image", "source": "build/images/background.png"},
         "sword_image": {"type": "image", "source": "build/images/sword.png"},
@@ -11,6 +13,8 @@
         "spawners",
         "fruits",
         "bombs",
+        "time_bombs",
+        "clocks",
         "special_fruits",
         "cuts",
         "hud"
@@ -56,6 +60,30 @@
                 "texture": "",
                 "group": "spawners",
                 "pool": "special_fruits",
+                "spawn_time": {"min": 5, "max": 10},
+                "velocity_x": {"min": -100, "max": 100},
+                "velocity_y": {"min": 850, "max": 1000}
+            }
+        },
+        "time_bomb_spawner": {
+            "type": "time_bomb_spawner",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "",
+                "group": "spawners",
+                "pool": "time_bombs",
+                "spawn_time": {"min": 3, "max": 5},
+                "velocity_x": {"min": -100, "max": 100},
+                "velocity_y": {"min": 850, "max": 1000}
+            }
+        },
+        "clock_spawner": {
+            "type": "clock_spawner",
+            "position": {"x": 0, "y": 0},
+            "properties": {
+                "texture": "",
+                "group": "spawners",
+                "pool": "clocks",
                 "spawn_time": {"min": 5, "max": 10},
                 "velocity_x": {"min": -100, "max": 100},
                 "velocity_y": {"min": 850, "max": 1000}

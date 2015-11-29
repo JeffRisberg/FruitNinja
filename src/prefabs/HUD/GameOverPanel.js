@@ -1,4 +1,4 @@
-import Prefab from "./Prefab";
+import Prefab from "../Prefab";
 
 class GameOverPanel extends Prefab {
 
