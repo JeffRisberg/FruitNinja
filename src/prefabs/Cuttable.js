@@ -27,6 +27,19 @@ class Cuttable extends Prefab {
         this.body.velocity.y = -velocity.y;
         this.body.velocity.x = velocity.x;
     }
+
+    cut() {
+        var emitter;
+        // create emitter in prefab position
+        emitter = this.game_state.game.add.emitter(this.x, this.y);
+        emitter.makeParticles("particle_image");
+        // set particles speed
+        emitter.minParticleSpeed.setTo(-200, -200);
+        emitter.maxParticleSpeed.setTo(200, 200);
+        emitter.gravity = 0;
+        // start emitter
+        emitter.start(true, 700, null, 1000);
+    }
 }
 
 export default Cuttable;

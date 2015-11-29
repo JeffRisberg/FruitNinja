@@ -21,6 +21,8 @@ class Fruit extends Cuttable {
     }
 
     cut() {
+        super.cut();
+        // if a fruit is cut, increment score
         this.game_state.score += 1;
         this.kill();
     }

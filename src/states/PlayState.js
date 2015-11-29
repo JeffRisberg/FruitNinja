@@ -1,8 +1,11 @@
 import Prefab from '../prefabs/Prefab';
-import Score from '../prefabs/Score';
-import FruitSpawner from '../prefabs/FruitSpawner';
 import BombSpawner from '../prefabs/BombSpawner';
+import FruitSpawner from '../prefabs/FruitSpawner';
+import SpecialFruitSpawner from '../prefabs/SpecialFruitSpawner';
 import Cut from '../prefabs/Cut';
+import Score from '../prefabs/Score';
+import Lives from '../prefabs/Lives';
+import GameOverPanel from '../prefabs/GameOverPanel';
 
 class PlayState extends Phaser.State {
 
@@ -10,8 +13,9 @@ class PlayState extends Phaser.State {
         super();
 
         this.prefab_classes = {
-            "fruit_spawner": FruitSpawner,
             "bomb_spawner": BombSpawner,
+            "fruit_spawner": FruitSpawner,
+            "special_fruit_spawner": SpecialFruitSpawner,
             "background": Prefab
         };
     }
@@ -30,6 +34,7 @@ class PlayState extends Phaser.State {
         this.MINIMUM_SWIPE_LENGTH = 50;
 
         this.score = 0;
+        this.lives = 3;
     }
 
     create() {
@@ -66,12 +71,10 @@ class PlayState extends Phaser.State {
     }
 
     start_swipe(pointer) {
-        console.log("start_swipe");
         this.start_swipe_point = new Phaser.Point(pointer.x, pointer.y);
     }
 
     end_swipe(pointer) {
-        console.log("end_swipe");
         var swipe_length, cut_style, cut;
         this.end_swipe_point = new Phaser.Point(pointer.x, pointer.y);
         swipe_length = Phaser.Point.distance(this.end_swipe_point, this.start_swipe_point);
@@ -90,6 +93,7 @@ class PlayState extends Phaser.State {
             this.swipe = new Phaser.Line(this.start_swipe_point.x, this.start_swipe_point.y, this.end_swipe_point.x, this.end_swipe_point.y);
             this.groups.fruits.forEachAlive(this.check_collision, this);
             this.groups.bombs.forEachAlive(this.check_collision, this);
+            this.groups.special_fruits.forEachAlive(this.check_collision, this);
         }
     }
 
@@ -110,13 +114,38 @@ class PlayState extends Phaser.State {
     }
 
     init_hud() {
+        var score_position, score_style, score, lives_position, lives;
         // create score prefab
-        var score_position = new Phaser.Point(20, 20);
-        var score_style = {font: "48px Arial", fill: "#fff"};
-        var score = new Score(this, "score", score_position, {text: "Fruits: ", style: score_style, group: "hud"});
+        score_position = new Phaser.Point(20, 20);
+        score_style = {font: "48px Arial", fill: "#fff"};
+        score = new Score(this, "score", score_position, {text: "Fruits: ", style: score_style, group: "hud"});
+
+        // create lives prefab
+        lives_position = new Phaser.Point(0.75 * this.game.world.width, 20);
+        lives = new Lives(this, "lives", lives_position, {texture: "sword_image", group: "hud", "lives": 3, "lives_spacing": 50});
     }
 
     game_over() {
+        var game_over_panel, game_over_position, game_over_bitmap, panel_text_style;
+        // if current score is higher than highest score, update it
+        if (!localStorage.highest_score || this.score > localStorage.highest_score) {
+            localStorage.highest_score = this.score;
+        }
+
+        // create a bitmap do show the game over panel
+        game_over_position = new Phaser.Point(0, this.game.world.height);
+        game_over_bitmap = this.add.bitmapData(this.game.world.width, this.game.world.height);
+        game_over_bitmap.ctx.fillStyle = "#000";
+        game_over_bitmap.ctx.fillRect(0, 0, this.game.world.width, this.game.world.height);
+        panel_text_style = {game_over: {font: "32px Arial", fill: "#FFF"},
+            current_score: {font: "20px Arial", fill: "#FFF"},
+            highest_score: {font: "18px Arial", fill: "#FFF"}};
+        // create the game over panel
+        game_over_panel = new GameOverPanel(this, "game_over_panel", game_over_position, {texture: game_over_bitmap, group: "hud", text_style: panel_text_style, animation_time: 500});
+        this.groups.hud.add(game_over_panel);
+    }
+
+    restart_level() {
         this.game.state.restart(true, false, this.level_data);
     }
 }

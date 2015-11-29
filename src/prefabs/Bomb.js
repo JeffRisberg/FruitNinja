@@ -9,7 +9,9 @@ class Bomb extends Cuttable {
     }
 
     cut() {
-        this.game_state.game_over();
+        super.cut();
+        // if a bomb is cut, the player loses a life
+        this.game_state.prefabs.lives.die();
         this.kill();
     }
 }
