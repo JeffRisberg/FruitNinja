@@ -1,18 +1,17 @@
-var FruitNinja = FruitNinja || {};
+import Cuttable from "./Cuttable";
 
-FruitNinja.Bomb = function (game_state, name, position, properties) {
-    "use strict";
-    FruitNinja.Cuttable.call(this, game_state, name, position, properties);
-    
-    this.body.setSize(20, 20);
-};
+class Bomb extends Cuttable {
 
-FruitNinja.Bomb.prototype = Object.create(FruitNinja.Cuttable.prototype);
-FruitNinja.Bomb.prototype.constructor = FruitNinja.Bomb;
+    constructor(game_state, name, position, properties) {
+        super(game_state, name, position, properties);
 
-FruitNinja.Bomb.prototype.cut = function () {
-    "use strict";
-    // if a bomb is cut, it's game over
-    this.game_state.game_over();
-    this.kill();
-};
+        this.body.setSize(20, 20);
+    }
+
+    cut() {
+        this.game_state.game_over();
+        this.kill();
+    }
+}
+
+export default Bomb;

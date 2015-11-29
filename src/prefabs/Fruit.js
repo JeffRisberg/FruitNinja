@@ -1,32 +1,29 @@
-var FruitNinja = FruitNinja || {};
+import Cuttable from "./Cuttable";
 
-FruitNinja.Fruit = function (game_state, name, position, properties) {
-    "use strict";
-    var frame_index;
-    FruitNinja.Cuttable.call(this, game_state, name, position, properties);
-    
-    this.frames = properties.frames;
-    
-    frame_index = this.game_state.rnd.between(0, this.frames.length - 1);
-    this.frame = this.frames[frame_index];
-    
-    this.body.setSize(20, 20);
-};
+class Fruit extends Cuttable {
 
-FruitNinja.Fruit.prototype = Object.create(FruitNinja.Cuttable.prototype);
-FruitNinja.Fruit.prototype.constructor = FruitNinja.Fruit;
+    constructor(game_state, name, position, properties) {
+        super(game_state, name, position, properties);
 
-FruitNinja.Fruit.prototype.reset = function (position_x, position_y, velocity) {
-    "use strict";
-    var frame_index;
-    FruitNinja.Cuttable.prototype.reset.call(this, position_x, position_y, velocity);
-    frame_index = this.game_state.rnd.between(0, this.frames.length - 1);
-    this.frame = this.frames[frame_index];
-};
+        this.frames = properties.frames;
 
-FruitNinja.Fruit.prototype.cut = function () {
-    "use strict";
-    // if a fruit is cut, increment score
-    this.game_state.score += 1;
-    this.kill();
-};
+        var frame_index = this.game_state.rnd.between(0, this.frames.length - 1);
+        this.frame = this.frames[frame_index];
+
+        this.body.setSize(20, 20);
+    }
+
+    reset(position_x, position_y, velocity) {
+        super.reset(position_x, position_y, velocity);
+
+        var frame_index = this.game_state.rnd.between(0, this.frames.length - 1);
+        this.frame = this.frames[frame_index];
+    }
+
+    cut() {
+        this.game_state.score += 1;
+        this.kill();
+    }
+}
+
+export default Fruit;

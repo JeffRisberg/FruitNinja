@@ -1,5 +1,3 @@
-import Container from '../prefabs/Container';
-
 class BootState extends Phaser.State {
 
     constructor() {
@@ -18,6 +16,8 @@ class BootState extends Phaser.State {
         var level_text = this.game.cache.getText("level1");
         var level_data = JSON.parse(level_text);
 
-        this.game.state.start("LoadingState", true, false, level_data);
+        this.game.state.start("loading", true, false, level_data);
     }
 }
+
+export default BootState;

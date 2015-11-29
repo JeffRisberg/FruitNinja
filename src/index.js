@@ -11,7 +11,7 @@ class FruitNinja extends Phaser.Game {
         this.state.add('loading', LoadingState, false);
         this.state.add('play', PlayState, false);
 
-        this.state.start('boot');
+        this.state.start('boot', true, false, "assets/levels/level1.json");
     }
 }
 

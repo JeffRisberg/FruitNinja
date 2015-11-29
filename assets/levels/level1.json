@@ -1,9 +1,8 @@
 {
     "assets": {
-        "fruit_image": {"type": "image", "source": "assets/images/fruit.png"},
-        "bomb_image": {"type": "image", "source": "assets/images/bomb.png"},
-        "background_image": {"type": "image", "source": "assets/images/background.png"},
-        "fruits_spritesheet": {"type": "spritesheet", "source": "assets/images/fruits.png", "frame_width": 28, "frame_height": 28}
+        "bomb_image": {"type": "image", "source": "build/images/bomb.png"},
+        "background_image": {"type": "image", "source": "build/images/background.png"},
+        "fruits_spritesheet": {"type": "spritesheet", "source": "build/images/fruits.png", "frame_width": 28, "frame_height": 28}
     },
     "groups": [
         "background",

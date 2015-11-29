@@ -1,7 +1,7 @@
 {
-  "name": "Phaser03ES6",
+  "name": "FruitNinja",
   "version": "1.0.0",
-  "description": "Phaser03 ported to ES6",
+  "description": "FruitNinja ported to ES6",
   "scripts": {
     "start": "gulp",
     "production": "gulp --production"
