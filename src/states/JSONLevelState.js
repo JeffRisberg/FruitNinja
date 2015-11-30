@@ -1,9 +1,3 @@
-import Prefab from '../prefabs/Prefab';
-import BombSpawner from '../prefabs/Spawners/BombSpawner';
-import FruitSpawner from '../prefabs/Spawners/FruitSpawner';
-import SpecialFruitSpawner from '../prefabs/Spawners/SpecialFruitSpawner';
-import TimeBombSpawner from '../prefabs/Spawners/TimeBombSpawner';
-import ClockSpawner from '../prefabs/Spawners/ClockSpawner';
 
 class JSONLevelState extends Phaser.State {
 
