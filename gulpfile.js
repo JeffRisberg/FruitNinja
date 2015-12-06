@@ -49,15 +49,15 @@ gulp.task('copyStatic', ['cleanBuild'], function() {
  */
 gulp.task('copyPhaser', ['copyStatic'], function() {
     var srcList = ['phaser.min.js'];
-    
+
     if (!isProduction()) {
         srcList.push('phaser.map', 'phaser.js');
     }
-    
+
     srcList = srcList.map(function(file) {
         return PHASER_PATH + file;
     });
-        
+
     return gulp.src(srcList)
         .pipe(gulp.dest(SCRIPTS_PATH));
 });
@@ -68,7 +68,7 @@ gulp.task('copyPhaser', ['copyStatic'], function() {
  */
 gulp.task('build', ['copyPhaser'], function () {
     var sourcemapPath = SCRIPTS_PATH + '/' + OUTPUT_FILE + '.map';
-    
+
     if (isProduction()) {
         gutil.log(gutil.colors.green('Running production build...'));
     } else {
@@ -79,16 +79,16 @@ gulp.task('build', ['copyPhaser'], function () {
         entries: ENTRY_FILE,
         debug: true
     })
-    .transform(babelify)
-    .bundle().on('error', function(error){
-          gutil.log(gutil.colors.red('[Build Error]', error.message));
-          this.emit('end');
-    })
-    .pipe(gulpif(!isProduction(), exorcist(sourcemapPath)))
-    .pipe(source(OUTPUT_FILE))
-    .pipe(buffer())
-    .pipe(gulpif(isProduction(), uglify()))
-    .pipe(gulp.dest(SCRIPTS_PATH));
+        .transform(babelify)
+        .bundle().on('error', function(error){
+            gutil.log(gutil.colors.red('[Build Error]', error.message));
+            this.emit('end');
+        })
+        .pipe(gulpif(!isProduction(), exorcist(sourcemapPath)))
+        .pipe(source(OUTPUT_FILE))
+        .pipe(buffer())
+        .pipe(gulpif(isProduction(), uglify()))
+        .pipe(gulp.dest(SCRIPTS_PATH));
 });
 
 /**
@@ -105,18 +105,24 @@ gulp.task('serve', ['build'], function() {
     });
 
     gulp.watch(SOURCE_PATH + '/**/*.js', ['watch-js']);
+    gulp.watch(STATIC_PATH + '/**', ['watch-static']);
 });
 
 /**
- * Rebuilds and reloads the project when executed.
+ * Rebuilds and reloads the scripts when executed.
  */
 gulp.task('watch-js', ['build'], browserSync.reload);
 
 /**
+ * Rebuilds and reloads the scripts when executed.
+ */
+gulp.task('watch-static', ['build'], browserSync.reload);
+
+/**
  * The tasks are executed in the following order:
  * 'cleanBuild' -> 'copyStatic' -> 'copyPhaser' -> 'build' -> 'serve'
- * 
- * Read more about task dependencies in Gulp: 
+ *
+ * Read more about task dependencies in Gulp:
  * https://medium.com/@dave_lunny/task-dependencies-in-gulp-b885c1ab48f0
  */
 gulp.task('default', ['serve']);
